@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import client from "prom-client";
 import routes from "./app/routes";
+import { globalErrorHandler, notFound } from "./shared/errorHandler";
 
 const app = express();
 
@@ -25,37 +26,7 @@ app.get("/metrics", async (req, res) => {
 
 app.use("/", routes);
 
-// Global error handler middleware
-app.use(
-  (
-    err: any,
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction,
-  ) => {
-    const status = err.status || 500;
-    const message = err.message || "Internal Server Error";
-
-    // Check for specific error messages to determine status code
-    if (message.includes("required for double-entry bookkeeping")) {
-      return res.status(400).json({ error: message });
-    }
-
-    if (
-      message.includes("Ledger invariant violation") ||
-      message.includes("not found")
-    ) {
-      return res.status(400).json({ error: message });
-    }
-
-    res.status(status).json({ error: message });
-  },
-);
-
-const notFound = (req: express.Request, res: express.Response) => {
-  res.status(404).json({ error: "Route not found" });
-};
-
+app.use(globalErrorHandler);
 app.use(notFound);
 
 export default app;

@@ -1,7 +1,8 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import cors from "cors";
 import client from "prom-client";
 import routes from "./app/routes";
+import { globalErrorHandler, notFound } from "./shared/errorHandler";
 
 const app = express();
 
@@ -18,22 +19,6 @@ app.get("/metrics", async (req, res) => {
 });
 
 app.use("/", routes);
-
-const globalErrorHandler = (
-  err: any,
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  const status = err.status || 500;
-  const message = err.message || "Internal Server Error";
-  console.error(err);
-  res.status(status).json({ error: message });
-};
-
-const notFound = (req: Request, res: Response) => {
-  res.status(404).json({ error: "Route not found" });
-};
 
 app.use(globalErrorHandler);
 app.use(notFound);
