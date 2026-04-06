@@ -8,13 +8,29 @@ datasource db {
 }
 
 model Wallet {
-  id           String   @id @default(uuid()) @map("wallet_id")
-  userId       String   @map("user_id") // Could be encrypted at app level
-  currencyCode String   @map("currency_code")
-  balance      Decimal  @default(0) @map("balance") @db.Decimal(18, 4)
-  createdAt    DateTime @default(now()) @map("created_at")
-  updatedAt    DateTime @updatedAt @map("updated_at")
+  id                  String   @id @default(uuid()) @map("wallet_id")
+  userId              String   @map("user_id")
+  currencyCode        String   @map("currency_code")
+  balance             Decimal  @default(0) @map("balance") @db.Decimal(18, 4)
+  ownerNameEncrypted  String?  @map("owner_name_encrypted")
+  ownerNameIv         String?  @map("owner_name_iv")
+  ownerNameAuthTag    String?  @map("owner_name_auth_tag")
+  ownerNameKey        String?  @map("owner_name_key")
+  ownerNameKeyIv      String?  @map("owner_name_key_iv")
+  ownerNameKeyAuthTag String?  @map("owner_name_key_auth_tag")
+  createdAt           DateTime @default(now()) @map("created_at")
+  updatedAt           DateTime @updatedAt @map("updated_at")
 
   @@index([userId])
   @@index([currencyCode])
+}
+
+model AccountAdjustment {
+  id           String   @id @default(uuid()) @map("adjustment_id")
+  walletId     String   @map("wallet_id")
+  amount       Decimal  @db.Decimal(18, 4)
+  adjustmentId String   @unique @map("adjustment_key")
+  createdAt    DateTime @default(now()) @map("created_at")
+
+  @@index([walletId])
 }

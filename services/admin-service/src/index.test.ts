@@ -3,8 +3,8 @@ import request from "supertest";
 let app: any;
 
 beforeAll(async () => {
-  const module = await import("./index");
-  app = module.app;
+  const module = await import("./server");
+  app = module.default;
 });
 
 describe("Admin service", () => {

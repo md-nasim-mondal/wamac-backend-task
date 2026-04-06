@@ -125,8 +125,22 @@ exports.Prisma.WalletScalarFieldEnum = {
   userId: 'userId',
   currencyCode: 'currencyCode',
   balance: 'balance',
+  ownerNameEncrypted: 'ownerNameEncrypted',
+  ownerNameIv: 'ownerNameIv',
+  ownerNameAuthTag: 'ownerNameAuthTag',
+  ownerNameKey: 'ownerNameKey',
+  ownerNameKeyIv: 'ownerNameKeyIv',
+  ownerNameKeyAuthTag: 'ownerNameKeyAuthTag',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
+};
+
+exports.Prisma.AccountAdjustmentScalarFieldEnum = {
+  id: 'id',
+  walletId: 'walletId',
+  amount: 'amount',
+  adjustmentId: 'adjustmentId',
+  createdAt: 'createdAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -139,9 +153,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
+};
+
 
 exports.Prisma.ModelName = {
-  Wallet: 'Wallet'
+  Wallet: 'Wallet',
+  AccountAdjustment: 'AccountAdjustment'
 };
 
 /**

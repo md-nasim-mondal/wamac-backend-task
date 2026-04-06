@@ -18,6 +18,11 @@ export type PrismaPromise<T> = $Public.PrismaPromise<T>
  * 
  */
 export type Wallet = $Result.DefaultSelection<Prisma.$WalletPayload>
+/**
+ * Model AccountAdjustment
+ * 
+ */
+export type AccountAdjustment = $Result.DefaultSelection<Prisma.$AccountAdjustmentPayload>
 
 /**
  * ##  Prisma Client ʲˢ
@@ -149,6 +154,16 @@ export class PrismaClient<
     * ```
     */
   get wallet(): Prisma.WalletDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.accountAdjustment`: Exposes CRUD operations for the **AccountAdjustment** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more AccountAdjustments
+    * const accountAdjustments = await prisma.accountAdjustment.findMany()
+    * ```
+    */
+  get accountAdjustment(): Prisma.AccountAdjustmentDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -583,7 +598,8 @@ export namespace Prisma {
 
 
   export const ModelName: {
-    Wallet: 'Wallet'
+    Wallet: 'Wallet',
+    AccountAdjustment: 'AccountAdjustment'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -599,7 +615,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "wallet"
+      modelProps: "wallet" | "accountAdjustment"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -674,6 +690,80 @@ export namespace Prisma {
           count: {
             args: Prisma.WalletCountArgs<ExtArgs>
             result: $Utils.Optional<WalletCountAggregateOutputType> | number
+          }
+        }
+      }
+      AccountAdjustment: {
+        payload: Prisma.$AccountAdjustmentPayload<ExtArgs>
+        fields: Prisma.AccountAdjustmentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.AccountAdjustmentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.AccountAdjustmentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>
+          }
+          findFirst: {
+            args: Prisma.AccountAdjustmentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.AccountAdjustmentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>
+          }
+          findMany: {
+            args: Prisma.AccountAdjustmentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>[]
+          }
+          create: {
+            args: Prisma.AccountAdjustmentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>
+          }
+          createMany: {
+            args: Prisma.AccountAdjustmentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.AccountAdjustmentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>[]
+          }
+          delete: {
+            args: Prisma.AccountAdjustmentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>
+          }
+          update: {
+            args: Prisma.AccountAdjustmentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>
+          }
+          deleteMany: {
+            args: Prisma.AccountAdjustmentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.AccountAdjustmentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.AccountAdjustmentUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>[]
+          }
+          upsert: {
+            args: Prisma.AccountAdjustmentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$AccountAdjustmentPayload>
+          }
+          aggregate: {
+            args: Prisma.AccountAdjustmentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateAccountAdjustment>
+          }
+          groupBy: {
+            args: Prisma.AccountAdjustmentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<AccountAdjustmentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.AccountAdjustmentCountArgs<ExtArgs>
+            result: $Utils.Optional<AccountAdjustmentCountAggregateOutputType> | number
           }
         }
       }
@@ -786,6 +876,7 @@ export namespace Prisma {
   }
   export type GlobalOmitConfig = {
     wallet?: WalletOmit
+    accountAdjustment?: AccountAdjustmentOmit
   }
 
   /* Types for Logging */
@@ -891,6 +982,12 @@ export namespace Prisma {
     userId: string | null
     currencyCode: string | null
     balance: Decimal | null
+    ownerNameEncrypted: string | null
+    ownerNameIv: string | null
+    ownerNameAuthTag: string | null
+    ownerNameKey: string | null
+    ownerNameKeyIv: string | null
+    ownerNameKeyAuthTag: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -900,6 +997,12 @@ export namespace Prisma {
     userId: string | null
     currencyCode: string | null
     balance: Decimal | null
+    ownerNameEncrypted: string | null
+    ownerNameIv: string | null
+    ownerNameAuthTag: string | null
+    ownerNameKey: string | null
+    ownerNameKeyIv: string | null
+    ownerNameKeyAuthTag: string | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -909,6 +1012,12 @@ export namespace Prisma {
     userId: number
     currencyCode: number
     balance: number
+    ownerNameEncrypted: number
+    ownerNameIv: number
+    ownerNameAuthTag: number
+    ownerNameKey: number
+    ownerNameKeyIv: number
+    ownerNameKeyAuthTag: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -928,6 +1037,12 @@ export namespace Prisma {
     userId?: true
     currencyCode?: true
     balance?: true
+    ownerNameEncrypted?: true
+    ownerNameIv?: true
+    ownerNameAuthTag?: true
+    ownerNameKey?: true
+    ownerNameKeyIv?: true
+    ownerNameKeyAuthTag?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -937,6 +1052,12 @@ export namespace Prisma {
     userId?: true
     currencyCode?: true
     balance?: true
+    ownerNameEncrypted?: true
+    ownerNameIv?: true
+    ownerNameAuthTag?: true
+    ownerNameKey?: true
+    ownerNameKeyIv?: true
+    ownerNameKeyAuthTag?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -946,6 +1067,12 @@ export namespace Prisma {
     userId?: true
     currencyCode?: true
     balance?: true
+    ownerNameEncrypted?: true
+    ownerNameIv?: true
+    ownerNameAuthTag?: true
+    ownerNameKey?: true
+    ownerNameKeyIv?: true
+    ownerNameKeyAuthTag?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -1042,6 +1169,12 @@ export namespace Prisma {
     userId: string
     currencyCode: string
     balance: Decimal
+    ownerNameEncrypted: string | null
+    ownerNameIv: string | null
+    ownerNameAuthTag: string | null
+    ownerNameKey: string | null
+    ownerNameKeyIv: string | null
+    ownerNameKeyAuthTag: string | null
     createdAt: Date
     updatedAt: Date
     _count: WalletCountAggregateOutputType | null
@@ -1070,6 +1203,12 @@ export namespace Prisma {
     userId?: boolean
     currencyCode?: boolean
     balance?: boolean
+    ownerNameEncrypted?: boolean
+    ownerNameIv?: boolean
+    ownerNameAuthTag?: boolean
+    ownerNameKey?: boolean
+    ownerNameKeyIv?: boolean
+    ownerNameKeyAuthTag?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["wallet"]>
@@ -1079,6 +1218,12 @@ export namespace Prisma {
     userId?: boolean
     currencyCode?: boolean
     balance?: boolean
+    ownerNameEncrypted?: boolean
+    ownerNameIv?: boolean
+    ownerNameAuthTag?: boolean
+    ownerNameKey?: boolean
+    ownerNameKeyIv?: boolean
+    ownerNameKeyAuthTag?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["wallet"]>
@@ -1088,6 +1233,12 @@ export namespace Prisma {
     userId?: boolean
     currencyCode?: boolean
     balance?: boolean
+    ownerNameEncrypted?: boolean
+    ownerNameIv?: boolean
+    ownerNameAuthTag?: boolean
+    ownerNameKey?: boolean
+    ownerNameKeyIv?: boolean
+    ownerNameKeyAuthTag?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }, ExtArgs["result"]["wallet"]>
@@ -1097,11 +1248,17 @@ export namespace Prisma {
     userId?: boolean
     currencyCode?: boolean
     balance?: boolean
+    ownerNameEncrypted?: boolean
+    ownerNameIv?: boolean
+    ownerNameAuthTag?: boolean
+    ownerNameKey?: boolean
+    ownerNameKeyIv?: boolean
+    ownerNameKeyAuthTag?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type WalletOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "currencyCode" | "balance" | "createdAt" | "updatedAt", ExtArgs["result"]["wallet"]>
+  export type WalletOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "userId" | "currencyCode" | "balance" | "ownerNameEncrypted" | "ownerNameIv" | "ownerNameAuthTag" | "ownerNameKey" | "ownerNameKeyIv" | "ownerNameKeyAuthTag" | "createdAt" | "updatedAt", ExtArgs["result"]["wallet"]>
 
   export type $WalletPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "Wallet"
@@ -1111,6 +1268,12 @@ export namespace Prisma {
       userId: string
       currencyCode: string
       balance: Prisma.Decimal
+      ownerNameEncrypted: string | null
+      ownerNameIv: string | null
+      ownerNameAuthTag: string | null
+      ownerNameKey: string | null
+      ownerNameKeyIv: string | null
+      ownerNameKeyAuthTag: string | null
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["wallet"]>
@@ -1540,6 +1703,12 @@ export namespace Prisma {
     readonly userId: FieldRef<"Wallet", 'String'>
     readonly currencyCode: FieldRef<"Wallet", 'String'>
     readonly balance: FieldRef<"Wallet", 'Decimal'>
+    readonly ownerNameEncrypted: FieldRef<"Wallet", 'String'>
+    readonly ownerNameIv: FieldRef<"Wallet", 'String'>
+    readonly ownerNameAuthTag: FieldRef<"Wallet", 'String'>
+    readonly ownerNameKey: FieldRef<"Wallet", 'String'>
+    readonly ownerNameKeyIv: FieldRef<"Wallet", 'String'>
+    readonly ownerNameKeyAuthTag: FieldRef<"Wallet", 'String'>
     readonly createdAt: FieldRef<"Wallet", 'DateTime'>
     readonly updatedAt: FieldRef<"Wallet", 'DateTime'>
   }
@@ -1914,6 +2083,1040 @@ export namespace Prisma {
 
 
   /**
+   * Model AccountAdjustment
+   */
+
+  export type AggregateAccountAdjustment = {
+    _count: AccountAdjustmentCountAggregateOutputType | null
+    _avg: AccountAdjustmentAvgAggregateOutputType | null
+    _sum: AccountAdjustmentSumAggregateOutputType | null
+    _min: AccountAdjustmentMinAggregateOutputType | null
+    _max: AccountAdjustmentMaxAggregateOutputType | null
+  }
+
+  export type AccountAdjustmentAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type AccountAdjustmentSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type AccountAdjustmentMinAggregateOutputType = {
+    id: string | null
+    walletId: string | null
+    amount: Decimal | null
+    adjustmentId: string | null
+    createdAt: Date | null
+  }
+
+  export type AccountAdjustmentMaxAggregateOutputType = {
+    id: string | null
+    walletId: string | null
+    amount: Decimal | null
+    adjustmentId: string | null
+    createdAt: Date | null
+  }
+
+  export type AccountAdjustmentCountAggregateOutputType = {
+    id: number
+    walletId: number
+    amount: number
+    adjustmentId: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type AccountAdjustmentAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type AccountAdjustmentSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type AccountAdjustmentMinAggregateInputType = {
+    id?: true
+    walletId?: true
+    amount?: true
+    adjustmentId?: true
+    createdAt?: true
+  }
+
+  export type AccountAdjustmentMaxAggregateInputType = {
+    id?: true
+    walletId?: true
+    amount?: true
+    adjustmentId?: true
+    createdAt?: true
+  }
+
+  export type AccountAdjustmentCountAggregateInputType = {
+    id?: true
+    walletId?: true
+    amount?: true
+    adjustmentId?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type AccountAdjustmentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AccountAdjustment to aggregate.
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AccountAdjustments to fetch.
+     */
+    orderBy?: AccountAdjustmentOrderByWithRelationInput | AccountAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: AccountAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AccountAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AccountAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned AccountAdjustments
+    **/
+    _count?: true | AccountAdjustmentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: AccountAdjustmentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: AccountAdjustmentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: AccountAdjustmentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: AccountAdjustmentMaxAggregateInputType
+  }
+
+  export type GetAccountAdjustmentAggregateType<T extends AccountAdjustmentAggregateArgs> = {
+        [P in keyof T & keyof AggregateAccountAdjustment]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateAccountAdjustment[P]>
+      : GetScalarType<T[P], AggregateAccountAdjustment[P]>
+  }
+
+
+
+
+  export type AccountAdjustmentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: AccountAdjustmentWhereInput
+    orderBy?: AccountAdjustmentOrderByWithAggregationInput | AccountAdjustmentOrderByWithAggregationInput[]
+    by: AccountAdjustmentScalarFieldEnum[] | AccountAdjustmentScalarFieldEnum
+    having?: AccountAdjustmentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: AccountAdjustmentCountAggregateInputType | true
+    _avg?: AccountAdjustmentAvgAggregateInputType
+    _sum?: AccountAdjustmentSumAggregateInputType
+    _min?: AccountAdjustmentMinAggregateInputType
+    _max?: AccountAdjustmentMaxAggregateInputType
+  }
+
+  export type AccountAdjustmentGroupByOutputType = {
+    id: string
+    walletId: string
+    amount: Decimal
+    adjustmentId: string
+    createdAt: Date
+    _count: AccountAdjustmentCountAggregateOutputType | null
+    _avg: AccountAdjustmentAvgAggregateOutputType | null
+    _sum: AccountAdjustmentSumAggregateOutputType | null
+    _min: AccountAdjustmentMinAggregateOutputType | null
+    _max: AccountAdjustmentMaxAggregateOutputType | null
+  }
+
+  type GetAccountAdjustmentGroupByPayload<T extends AccountAdjustmentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<AccountAdjustmentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof AccountAdjustmentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], AccountAdjustmentGroupByOutputType[P]>
+            : GetScalarType<T[P], AccountAdjustmentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type AccountAdjustmentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    amount?: boolean
+    adjustmentId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["accountAdjustment"]>
+
+  export type AccountAdjustmentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    amount?: boolean
+    adjustmentId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["accountAdjustment"]>
+
+  export type AccountAdjustmentSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    walletId?: boolean
+    amount?: boolean
+    adjustmentId?: boolean
+    createdAt?: boolean
+  }, ExtArgs["result"]["accountAdjustment"]>
+
+  export type AccountAdjustmentSelectScalar = {
+    id?: boolean
+    walletId?: boolean
+    amount?: boolean
+    adjustmentId?: boolean
+    createdAt?: boolean
+  }
+
+  export type AccountAdjustmentOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "walletId" | "amount" | "adjustmentId" | "createdAt", ExtArgs["result"]["accountAdjustment"]>
+
+  export type $AccountAdjustmentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "AccountAdjustment"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      walletId: string
+      amount: Prisma.Decimal
+      adjustmentId: string
+      createdAt: Date
+    }, ExtArgs["result"]["accountAdjustment"]>
+    composites: {}
+  }
+
+  type AccountAdjustmentGetPayload<S extends boolean | null | undefined | AccountAdjustmentDefaultArgs> = $Result.GetResult<Prisma.$AccountAdjustmentPayload, S>
+
+  type AccountAdjustmentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<AccountAdjustmentFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: AccountAdjustmentCountAggregateInputType | true
+    }
+
+  export interface AccountAdjustmentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['AccountAdjustment'], meta: { name: 'AccountAdjustment' } }
+    /**
+     * Find zero or one AccountAdjustment that matches the filter.
+     * @param {AccountAdjustmentFindUniqueArgs} args - Arguments to find a AccountAdjustment
+     * @example
+     * // Get one AccountAdjustment
+     * const accountAdjustment = await prisma.accountAdjustment.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends AccountAdjustmentFindUniqueArgs>(args: SelectSubset<T, AccountAdjustmentFindUniqueArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one AccountAdjustment that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {AccountAdjustmentFindUniqueOrThrowArgs} args - Arguments to find a AccountAdjustment
+     * @example
+     * // Get one AccountAdjustment
+     * const accountAdjustment = await prisma.accountAdjustment.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends AccountAdjustmentFindUniqueOrThrowArgs>(args: SelectSubset<T, AccountAdjustmentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AccountAdjustment that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentFindFirstArgs} args - Arguments to find a AccountAdjustment
+     * @example
+     * // Get one AccountAdjustment
+     * const accountAdjustment = await prisma.accountAdjustment.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends AccountAdjustmentFindFirstArgs>(args?: SelectSubset<T, AccountAdjustmentFindFirstArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first AccountAdjustment that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentFindFirstOrThrowArgs} args - Arguments to find a AccountAdjustment
+     * @example
+     * // Get one AccountAdjustment
+     * const accountAdjustment = await prisma.accountAdjustment.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends AccountAdjustmentFindFirstOrThrowArgs>(args?: SelectSubset<T, AccountAdjustmentFindFirstOrThrowArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more AccountAdjustments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all AccountAdjustments
+     * const accountAdjustments = await prisma.accountAdjustment.findMany()
+     * 
+     * // Get first 10 AccountAdjustments
+     * const accountAdjustments = await prisma.accountAdjustment.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const accountAdjustmentWithIdOnly = await prisma.accountAdjustment.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends AccountAdjustmentFindManyArgs>(args?: SelectSubset<T, AccountAdjustmentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a AccountAdjustment.
+     * @param {AccountAdjustmentCreateArgs} args - Arguments to create a AccountAdjustment.
+     * @example
+     * // Create one AccountAdjustment
+     * const AccountAdjustment = await prisma.accountAdjustment.create({
+     *   data: {
+     *     // ... data to create a AccountAdjustment
+     *   }
+     * })
+     * 
+     */
+    create<T extends AccountAdjustmentCreateArgs>(args: SelectSubset<T, AccountAdjustmentCreateArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many AccountAdjustments.
+     * @param {AccountAdjustmentCreateManyArgs} args - Arguments to create many AccountAdjustments.
+     * @example
+     * // Create many AccountAdjustments
+     * const accountAdjustment = await prisma.accountAdjustment.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends AccountAdjustmentCreateManyArgs>(args?: SelectSubset<T, AccountAdjustmentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many AccountAdjustments and returns the data saved in the database.
+     * @param {AccountAdjustmentCreateManyAndReturnArgs} args - Arguments to create many AccountAdjustments.
+     * @example
+     * // Create many AccountAdjustments
+     * const accountAdjustment = await prisma.accountAdjustment.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many AccountAdjustments and only return the `id`
+     * const accountAdjustmentWithIdOnly = await prisma.accountAdjustment.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends AccountAdjustmentCreateManyAndReturnArgs>(args?: SelectSubset<T, AccountAdjustmentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a AccountAdjustment.
+     * @param {AccountAdjustmentDeleteArgs} args - Arguments to delete one AccountAdjustment.
+     * @example
+     * // Delete one AccountAdjustment
+     * const AccountAdjustment = await prisma.accountAdjustment.delete({
+     *   where: {
+     *     // ... filter to delete one AccountAdjustment
+     *   }
+     * })
+     * 
+     */
+    delete<T extends AccountAdjustmentDeleteArgs>(args: SelectSubset<T, AccountAdjustmentDeleteArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one AccountAdjustment.
+     * @param {AccountAdjustmentUpdateArgs} args - Arguments to update one AccountAdjustment.
+     * @example
+     * // Update one AccountAdjustment
+     * const accountAdjustment = await prisma.accountAdjustment.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends AccountAdjustmentUpdateArgs>(args: SelectSubset<T, AccountAdjustmentUpdateArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more AccountAdjustments.
+     * @param {AccountAdjustmentDeleteManyArgs} args - Arguments to filter AccountAdjustments to delete.
+     * @example
+     * // Delete a few AccountAdjustments
+     * const { count } = await prisma.accountAdjustment.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends AccountAdjustmentDeleteManyArgs>(args?: SelectSubset<T, AccountAdjustmentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AccountAdjustments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many AccountAdjustments
+     * const accountAdjustment = await prisma.accountAdjustment.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends AccountAdjustmentUpdateManyArgs>(args: SelectSubset<T, AccountAdjustmentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more AccountAdjustments and returns the data updated in the database.
+     * @param {AccountAdjustmentUpdateManyAndReturnArgs} args - Arguments to update many AccountAdjustments.
+     * @example
+     * // Update many AccountAdjustments
+     * const accountAdjustment = await prisma.accountAdjustment.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more AccountAdjustments and only return the `id`
+     * const accountAdjustmentWithIdOnly = await prisma.accountAdjustment.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends AccountAdjustmentUpdateManyAndReturnArgs>(args: SelectSubset<T, AccountAdjustmentUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one AccountAdjustment.
+     * @param {AccountAdjustmentUpsertArgs} args - Arguments to update or create a AccountAdjustment.
+     * @example
+     * // Update or create a AccountAdjustment
+     * const accountAdjustment = await prisma.accountAdjustment.upsert({
+     *   create: {
+     *     // ... data to create a AccountAdjustment
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the AccountAdjustment we want to update
+     *   }
+     * })
+     */
+    upsert<T extends AccountAdjustmentUpsertArgs>(args: SelectSubset<T, AccountAdjustmentUpsertArgs<ExtArgs>>): Prisma__AccountAdjustmentClient<$Result.GetResult<Prisma.$AccountAdjustmentPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of AccountAdjustments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentCountArgs} args - Arguments to filter AccountAdjustments to count.
+     * @example
+     * // Count the number of AccountAdjustments
+     * const count = await prisma.accountAdjustment.count({
+     *   where: {
+     *     // ... the filter for the AccountAdjustments we want to count
+     *   }
+     * })
+    **/
+    count<T extends AccountAdjustmentCountArgs>(
+      args?: Subset<T, AccountAdjustmentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], AccountAdjustmentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a AccountAdjustment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends AccountAdjustmentAggregateArgs>(args: Subset<T, AccountAdjustmentAggregateArgs>): Prisma.PrismaPromise<GetAccountAdjustmentAggregateType<T>>
+
+    /**
+     * Group by AccountAdjustment.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {AccountAdjustmentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends AccountAdjustmentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: AccountAdjustmentGroupByArgs['orderBy'] }
+        : { orderBy?: AccountAdjustmentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, AccountAdjustmentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetAccountAdjustmentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the AccountAdjustment model
+   */
+  readonly fields: AccountAdjustmentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for AccountAdjustment.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__AccountAdjustmentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the AccountAdjustment model
+   */
+  interface AccountAdjustmentFieldRefs {
+    readonly id: FieldRef<"AccountAdjustment", 'String'>
+    readonly walletId: FieldRef<"AccountAdjustment", 'String'>
+    readonly amount: FieldRef<"AccountAdjustment", 'Decimal'>
+    readonly adjustmentId: FieldRef<"AccountAdjustment", 'String'>
+    readonly createdAt: FieldRef<"AccountAdjustment", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * AccountAdjustment findUnique
+   */
+  export type AccountAdjustmentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which AccountAdjustment to fetch.
+     */
+    where: AccountAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * AccountAdjustment findUniqueOrThrow
+   */
+  export type AccountAdjustmentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which AccountAdjustment to fetch.
+     */
+    where: AccountAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * AccountAdjustment findFirst
+   */
+  export type AccountAdjustmentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which AccountAdjustment to fetch.
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AccountAdjustments to fetch.
+     */
+    orderBy?: AccountAdjustmentOrderByWithRelationInput | AccountAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AccountAdjustments.
+     */
+    cursor?: AccountAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AccountAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AccountAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AccountAdjustments.
+     */
+    distinct?: AccountAdjustmentScalarFieldEnum | AccountAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * AccountAdjustment findFirstOrThrow
+   */
+  export type AccountAdjustmentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which AccountAdjustment to fetch.
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AccountAdjustments to fetch.
+     */
+    orderBy?: AccountAdjustmentOrderByWithRelationInput | AccountAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for AccountAdjustments.
+     */
+    cursor?: AccountAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AccountAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AccountAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AccountAdjustments.
+     */
+    distinct?: AccountAdjustmentScalarFieldEnum | AccountAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * AccountAdjustment findMany
+   */
+  export type AccountAdjustmentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter, which AccountAdjustments to fetch.
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of AccountAdjustments to fetch.
+     */
+    orderBy?: AccountAdjustmentOrderByWithRelationInput | AccountAdjustmentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing AccountAdjustments.
+     */
+    cursor?: AccountAdjustmentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` AccountAdjustments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` AccountAdjustments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of AccountAdjustments.
+     */
+    distinct?: AccountAdjustmentScalarFieldEnum | AccountAdjustmentScalarFieldEnum[]
+  }
+
+  /**
+   * AccountAdjustment create
+   */
+  export type AccountAdjustmentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data needed to create a AccountAdjustment.
+     */
+    data: XOR<AccountAdjustmentCreateInput, AccountAdjustmentUncheckedCreateInput>
+  }
+
+  /**
+   * AccountAdjustment createMany
+   */
+  export type AccountAdjustmentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many AccountAdjustments.
+     */
+    data: AccountAdjustmentCreateManyInput | AccountAdjustmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AccountAdjustment createManyAndReturn
+   */
+  export type AccountAdjustmentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data used to create many AccountAdjustments.
+     */
+    data: AccountAdjustmentCreateManyInput | AccountAdjustmentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * AccountAdjustment update
+   */
+  export type AccountAdjustmentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data needed to update a AccountAdjustment.
+     */
+    data: XOR<AccountAdjustmentUpdateInput, AccountAdjustmentUncheckedUpdateInput>
+    /**
+     * Choose, which AccountAdjustment to update.
+     */
+    where: AccountAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * AccountAdjustment updateMany
+   */
+  export type AccountAdjustmentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update AccountAdjustments.
+     */
+    data: XOR<AccountAdjustmentUpdateManyMutationInput, AccountAdjustmentUncheckedUpdateManyInput>
+    /**
+     * Filter which AccountAdjustments to update
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * Limit how many AccountAdjustments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AccountAdjustment updateManyAndReturn
+   */
+  export type AccountAdjustmentUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * The data used to update AccountAdjustments.
+     */
+    data: XOR<AccountAdjustmentUpdateManyMutationInput, AccountAdjustmentUncheckedUpdateManyInput>
+    /**
+     * Filter which AccountAdjustments to update
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * Limit how many AccountAdjustments to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * AccountAdjustment upsert
+   */
+  export type AccountAdjustmentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * The filter to search for the AccountAdjustment to update in case it exists.
+     */
+    where: AccountAdjustmentWhereUniqueInput
+    /**
+     * In case the AccountAdjustment found by the `where` argument doesn't exist, create a new AccountAdjustment with this data.
+     */
+    create: XOR<AccountAdjustmentCreateInput, AccountAdjustmentUncheckedCreateInput>
+    /**
+     * In case the AccountAdjustment was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<AccountAdjustmentUpdateInput, AccountAdjustmentUncheckedUpdateInput>
+  }
+
+  /**
+   * AccountAdjustment delete
+   */
+  export type AccountAdjustmentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+    /**
+     * Filter which AccountAdjustment to delete.
+     */
+    where: AccountAdjustmentWhereUniqueInput
+  }
+
+  /**
+   * AccountAdjustment deleteMany
+   */
+  export type AccountAdjustmentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which AccountAdjustments to delete
+     */
+    where?: AccountAdjustmentWhereInput
+    /**
+     * Limit how many AccountAdjustments to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * AccountAdjustment without action
+   */
+  export type AccountAdjustmentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the AccountAdjustment
+     */
+    select?: AccountAdjustmentSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the AccountAdjustment
+     */
+    omit?: AccountAdjustmentOmit<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -1932,11 +3135,28 @@ export namespace Prisma {
     userId: 'userId',
     currencyCode: 'currencyCode',
     balance: 'balance',
+    ownerNameEncrypted: 'ownerNameEncrypted',
+    ownerNameIv: 'ownerNameIv',
+    ownerNameAuthTag: 'ownerNameAuthTag',
+    ownerNameKey: 'ownerNameKey',
+    ownerNameKeyIv: 'ownerNameKeyIv',
+    ownerNameKeyAuthTag: 'ownerNameKeyAuthTag',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
 
   export type WalletScalarFieldEnum = (typeof WalletScalarFieldEnum)[keyof typeof WalletScalarFieldEnum]
+
+
+  export const AccountAdjustmentScalarFieldEnum: {
+    id: 'id',
+    walletId: 'walletId',
+    amount: 'amount',
+    adjustmentId: 'adjustmentId',
+    createdAt: 'createdAt'
+  };
+
+  export type AccountAdjustmentScalarFieldEnum = (typeof AccountAdjustmentScalarFieldEnum)[keyof typeof AccountAdjustmentScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -1953,6 +3173,14 @@ export namespace Prisma {
   };
 
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -2027,6 +3255,12 @@ export namespace Prisma {
     userId?: StringFilter<"Wallet"> | string
     currencyCode?: StringFilter<"Wallet"> | string
     balance?: DecimalFilter<"Wallet"> | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameIv?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameAuthTag?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameKey?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameKeyIv?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameKeyAuthTag?: StringNullableFilter<"Wallet"> | string | null
     createdAt?: DateTimeFilter<"Wallet"> | Date | string
     updatedAt?: DateTimeFilter<"Wallet"> | Date | string
   }
@@ -2036,6 +3270,12 @@ export namespace Prisma {
     userId?: SortOrder
     currencyCode?: SortOrder
     balance?: SortOrder
+    ownerNameEncrypted?: SortOrderInput | SortOrder
+    ownerNameIv?: SortOrderInput | SortOrder
+    ownerNameAuthTag?: SortOrderInput | SortOrder
+    ownerNameKey?: SortOrderInput | SortOrder
+    ownerNameKeyIv?: SortOrderInput | SortOrder
+    ownerNameKeyAuthTag?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2048,6 +3288,12 @@ export namespace Prisma {
     userId?: StringFilter<"Wallet"> | string
     currencyCode?: StringFilter<"Wallet"> | string
     balance?: DecimalFilter<"Wallet"> | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameIv?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameAuthTag?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameKey?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameKeyIv?: StringNullableFilter<"Wallet"> | string | null
+    ownerNameKeyAuthTag?: StringNullableFilter<"Wallet"> | string | null
     createdAt?: DateTimeFilter<"Wallet"> | Date | string
     updatedAt?: DateTimeFilter<"Wallet"> | Date | string
   }, "id">
@@ -2057,6 +3303,12 @@ export namespace Prisma {
     userId?: SortOrder
     currencyCode?: SortOrder
     balance?: SortOrder
+    ownerNameEncrypted?: SortOrderInput | SortOrder
+    ownerNameIv?: SortOrderInput | SortOrder
+    ownerNameAuthTag?: SortOrderInput | SortOrder
+    ownerNameKey?: SortOrderInput | SortOrder
+    ownerNameKeyIv?: SortOrderInput | SortOrder
+    ownerNameKeyAuthTag?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: WalletCountOrderByAggregateInput
@@ -2074,8 +3326,68 @@ export namespace Prisma {
     userId?: StringWithAggregatesFilter<"Wallet"> | string
     currencyCode?: StringWithAggregatesFilter<"Wallet"> | string
     balance?: DecimalWithAggregatesFilter<"Wallet"> | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: StringNullableWithAggregatesFilter<"Wallet"> | string | null
+    ownerNameIv?: StringNullableWithAggregatesFilter<"Wallet"> | string | null
+    ownerNameAuthTag?: StringNullableWithAggregatesFilter<"Wallet"> | string | null
+    ownerNameKey?: StringNullableWithAggregatesFilter<"Wallet"> | string | null
+    ownerNameKeyIv?: StringNullableWithAggregatesFilter<"Wallet"> | string | null
+    ownerNameKeyAuthTag?: StringNullableWithAggregatesFilter<"Wallet"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"Wallet"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Wallet"> | Date | string
+  }
+
+  export type AccountAdjustmentWhereInput = {
+    AND?: AccountAdjustmentWhereInput | AccountAdjustmentWhereInput[]
+    OR?: AccountAdjustmentWhereInput[]
+    NOT?: AccountAdjustmentWhereInput | AccountAdjustmentWhereInput[]
+    id?: StringFilter<"AccountAdjustment"> | string
+    walletId?: StringFilter<"AccountAdjustment"> | string
+    amount?: DecimalFilter<"AccountAdjustment"> | Decimal | DecimalJsLike | number | string
+    adjustmentId?: StringFilter<"AccountAdjustment"> | string
+    createdAt?: DateTimeFilter<"AccountAdjustment"> | Date | string
+  }
+
+  export type AccountAdjustmentOrderByWithRelationInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    amount?: SortOrder
+    adjustmentId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AccountAdjustmentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    adjustmentId?: string
+    AND?: AccountAdjustmentWhereInput | AccountAdjustmentWhereInput[]
+    OR?: AccountAdjustmentWhereInput[]
+    NOT?: AccountAdjustmentWhereInput | AccountAdjustmentWhereInput[]
+    walletId?: StringFilter<"AccountAdjustment"> | string
+    amount?: DecimalFilter<"AccountAdjustment"> | Decimal | DecimalJsLike | number | string
+    createdAt?: DateTimeFilter<"AccountAdjustment"> | Date | string
+  }, "id" | "adjustmentId">
+
+  export type AccountAdjustmentOrderByWithAggregationInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    amount?: SortOrder
+    adjustmentId?: SortOrder
+    createdAt?: SortOrder
+    _count?: AccountAdjustmentCountOrderByAggregateInput
+    _avg?: AccountAdjustmentAvgOrderByAggregateInput
+    _max?: AccountAdjustmentMaxOrderByAggregateInput
+    _min?: AccountAdjustmentMinOrderByAggregateInput
+    _sum?: AccountAdjustmentSumOrderByAggregateInput
+  }
+
+  export type AccountAdjustmentScalarWhereWithAggregatesInput = {
+    AND?: AccountAdjustmentScalarWhereWithAggregatesInput | AccountAdjustmentScalarWhereWithAggregatesInput[]
+    OR?: AccountAdjustmentScalarWhereWithAggregatesInput[]
+    NOT?: AccountAdjustmentScalarWhereWithAggregatesInput | AccountAdjustmentScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"AccountAdjustment"> | string
+    walletId?: StringWithAggregatesFilter<"AccountAdjustment"> | string
+    amount?: DecimalWithAggregatesFilter<"AccountAdjustment"> | Decimal | DecimalJsLike | number | string
+    adjustmentId?: StringWithAggregatesFilter<"AccountAdjustment"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"AccountAdjustment"> | Date | string
   }
 
   export type WalletCreateInput = {
@@ -2083,6 +3395,12 @@ export namespace Prisma {
     userId: string
     currencyCode: string
     balance?: Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: string | null
+    ownerNameIv?: string | null
+    ownerNameAuthTag?: string | null
+    ownerNameKey?: string | null
+    ownerNameKeyIv?: string | null
+    ownerNameKeyAuthTag?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2092,6 +3410,12 @@ export namespace Prisma {
     userId: string
     currencyCode: string
     balance?: Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: string | null
+    ownerNameIv?: string | null
+    ownerNameAuthTag?: string | null
+    ownerNameKey?: string | null
+    ownerNameKeyIv?: string | null
+    ownerNameKeyAuthTag?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2101,6 +3425,12 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKey?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2110,6 +3440,12 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKey?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2119,6 +3455,12 @@ export namespace Prisma {
     userId: string
     currencyCode: string
     balance?: Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: string | null
+    ownerNameIv?: string | null
+    ownerNameAuthTag?: string | null
+    ownerNameKey?: string | null
+    ownerNameKeyIv?: string | null
+    ownerNameKeyAuthTag?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -2128,6 +3470,12 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKey?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -2137,8 +3485,70 @@ export namespace Prisma {
     userId?: StringFieldUpdateOperationsInput | string
     currencyCode?: StringFieldUpdateOperationsInput | string
     balance?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    ownerNameEncrypted?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKey?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyIv?: NullableStringFieldUpdateOperationsInput | string | null
+    ownerNameKeyAuthTag?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AccountAdjustmentCreateInput = {
+    id?: string
+    walletId: string
+    amount: Decimal | DecimalJsLike | number | string
+    adjustmentId: string
+    createdAt?: Date | string
+  }
+
+  export type AccountAdjustmentUncheckedCreateInput = {
+    id?: string
+    walletId: string
+    amount: Decimal | DecimalJsLike | number | string
+    adjustmentId: string
+    createdAt?: Date | string
+  }
+
+  export type AccountAdjustmentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AccountAdjustmentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AccountAdjustmentCreateManyInput = {
+    id?: string
+    walletId: string
+    amount: Decimal | DecimalJsLike | number | string
+    adjustmentId: string
+    createdAt?: Date | string
+  }
+
+  export type AccountAdjustmentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type AccountAdjustmentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    walletId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    adjustmentId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type StringFilter<$PrismaModel = never> = {
@@ -2167,6 +3577,21 @@ export namespace Prisma {
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
   }
 
+  export type StringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -2178,11 +3603,22 @@ export namespace Prisma {
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
   }
 
+  export type SortOrderInput = {
+    sort: SortOrder
+    nulls?: NullsOrder
+  }
+
   export type WalletCountOrderByAggregateInput = {
     id?: SortOrder
     userId?: SortOrder
     currencyCode?: SortOrder
     balance?: SortOrder
+    ownerNameEncrypted?: SortOrder
+    ownerNameIv?: SortOrder
+    ownerNameAuthTag?: SortOrder
+    ownerNameKey?: SortOrder
+    ownerNameKeyIv?: SortOrder
+    ownerNameKeyAuthTag?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2196,6 +3632,12 @@ export namespace Prisma {
     userId?: SortOrder
     currencyCode?: SortOrder
     balance?: SortOrder
+    ownerNameEncrypted?: SortOrder
+    ownerNameIv?: SortOrder
+    ownerNameAuthTag?: SortOrder
+    ownerNameKey?: SortOrder
+    ownerNameKeyIv?: SortOrder
+    ownerNameKeyAuthTag?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2205,6 +3647,12 @@ export namespace Prisma {
     userId?: SortOrder
     currencyCode?: SortOrder
     balance?: SortOrder
+    ownerNameEncrypted?: SortOrder
+    ownerNameIv?: SortOrder
+    ownerNameAuthTag?: SortOrder
+    ownerNameKey?: SortOrder
+    ownerNameKeyIv?: SortOrder
+    ownerNameKeyAuthTag?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -2247,6 +3695,24 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type StringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    mode?: QueryMode
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -2261,6 +3727,38 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type AccountAdjustmentCountOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    amount?: SortOrder
+    adjustmentId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AccountAdjustmentAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type AccountAdjustmentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    amount?: SortOrder
+    adjustmentId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AccountAdjustmentMinOrderByAggregateInput = {
+    id?: SortOrder
+    walletId?: SortOrder
+    amount?: SortOrder
+    adjustmentId?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type AccountAdjustmentSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
   export type StringFieldUpdateOperationsInput = {
     set?: string
   }
@@ -2271,6 +3769,10 @@ export namespace Prisma {
     decrement?: Decimal | DecimalJsLike | number | string
     multiply?: Decimal | DecimalJsLike | number | string
     divide?: Decimal | DecimalJsLike | number | string
+  }
+
+  export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null
   }
 
   export type DateTimeFieldUpdateOperationsInput = {
@@ -2300,6 +3802,20 @@ export namespace Prisma {
     gt?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     gte?: Decimal | DecimalJsLike | number | string | DecimalFieldRefInput<$PrismaModel>
     not?: NestedDecimalFilter<$PrismaModel> | Decimal | DecimalJsLike | number | string
+  }
+
+  export type NestedStringNullableFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableFilter<$PrismaModel> | string | null
   }
 
   export type NestedDateTimeFilter<$PrismaModel = never> = {
@@ -2355,6 +3871,34 @@ export namespace Prisma {
     _sum?: NestedDecimalFilter<$PrismaModel>
     _min?: NestedDecimalFilter<$PrismaModel>
     _max?: NestedDecimalFilter<$PrismaModel>
+  }
+
+  export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: string | StringFieldRefInput<$PrismaModel> | null
+    in?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    notIn?: string[] | ListStringFieldRefInput<$PrismaModel> | null
+    lt?: string | StringFieldRefInput<$PrismaModel>
+    lte?: string | StringFieldRefInput<$PrismaModel>
+    gt?: string | StringFieldRefInput<$PrismaModel>
+    gte?: string | StringFieldRefInput<$PrismaModel>
+    contains?: string | StringFieldRefInput<$PrismaModel>
+    startsWith?: string | StringFieldRefInput<$PrismaModel>
+    endsWith?: string | StringFieldRefInput<$PrismaModel>
+    not?: NestedStringNullableWithAggregatesFilter<$PrismaModel> | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedStringNullableFilter<$PrismaModel>
+    _max?: NestedStringNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntNullableFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel> | null
+    in?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel> | null
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntNullableFilter<$PrismaModel> | number | null
   }
 
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
