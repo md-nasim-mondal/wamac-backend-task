@@ -49,9 +49,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run prisma:generate --workspace=account-service
-      - run: pnpm run build --workspace=account-service
-      - run: pnpm run test --workspace=account-service
+      - run: pnpm -r -F account-service run prisma:generate
+      - run: pnpm -r -F account-service run build
+      - run: pnpm -r -F account-service run test
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/account-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -72,9 +72,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run prisma:generate --workspace=transaction-service
-      - run: pnpm run build --workspace=transaction-service
-      - run: pnpm run test --workspace=transaction-service
+      - run: pnpm -r -F transaction-service run prisma:generate
+      - run: pnpm -r -F transaction-service run build
+      - run: pnpm -r -F transaction-service run test
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/transaction-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -95,9 +95,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run prisma:generate --workspace=ledger-service
-      - run: pnpm run build --workspace=ledger-service
-      - run: pnpm run test --workspace=ledger-service
+      - run: pnpm -r -F ledger-service run prisma:generate
+      - run: pnpm -r -F ledger-service run build
+      - run: pnpm -r -F ledger-service run test
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/ledger-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -118,9 +118,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run prisma:generate --workspace=fx-service
-      - run: pnpm run build --workspace=fx-service
-      - run: pnpm run test --workspace=fx-service
+      - run: pnpm -r -F fx-service run prisma:generate
+      - run: pnpm -r -F fx-service run build
+      - run: pnpm -r -F fx-service run test
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/fx-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -141,9 +141,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run prisma:generate --workspace=payroll-service
-      - run: pnpm run build --workspace=payroll-service
-      - run: pnpm run test --workspace=payroll-service
+      - run: pnpm -r -F payroll-service run prisma:generate
+      - run: pnpm -r -F payroll-service run build
+      - run: pnpm -r -F payroll-service run test
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/payroll-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -164,9 +164,9 @@ jobs:
           node-version: "18"
           cache: "pnpm"
       - run: pnpm install --frozen-lockfile
-      - run: pnpm run prisma:generate --workspace=admin-service
-      - run: pnpm run build --workspace=admin-service
-      - run: pnpm run test --workspace=admin-service
+      - run: pnpm -r -F admin-service run prisma:generate
+      - run: pnpm -r -F admin-service run build
+      - run: pnpm -r -F admin-service run test
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/admin-service/package.json').version")" >> $GITHUB_OUTPUT
