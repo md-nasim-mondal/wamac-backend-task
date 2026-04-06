@@ -20,11 +20,17 @@ jobs:
       - uses: dorny/paths-filter@v2
         id: filter
         with:
-          account: "services/account-service/**"
-          transaction: "services/transaction-service/**"
-          ledger: "services/ledger-service/**"
-          fx: "services/fx-service/**"
-          payroll: "services/payroll-service/**"
+          filters: |
+            account:
+              - 'services/account-service/**'
+            transaction:
+              - 'services/transaction-service/**'
+            ledger:
+              - 'services/ledger-service/**'
+            fx:
+              - 'services/fx-service/**'
+            payroll:
+              - 'services/payroll-service/**'
 
   build-account:
     needs: detect-changes
