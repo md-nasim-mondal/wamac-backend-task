@@ -1,0 +1,180 @@
+{
+  "info": {
+    "name": "NovaPay Backend API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Postman collection for NovaPay backend services. Use baseUrl = http://localhost."
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost"
+    },
+    {
+      "key": "transactionId",
+      "value": ""
+    },
+    {
+      "key": "fxQuoteId",
+      "value": ""
+    },
+    {
+      "key": "accountId",
+      "value": ""
+    },
+    {
+      "key": "jobId",
+      "value": ""
+    }
+  ],
+  "item": [
+    {
+      "name": "Create Account",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"user-123\",\n  \"currencyCode\": \"USD\",\n  \"initialBalance\": 1000,\n  \"ownerName\": \"Alice Example\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/accounts",
+          "host": ["{{baseUrl}}"],
+          "path": ["accounts"]
+        }
+      }
+    },
+    {
+      "name": "Get Account Balance",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/accounts/{{accountId}}/balance",
+          "host": ["{{baseUrl}}"],
+          "path": ["accounts", "{{accountId}}", "balance"]
+        }
+      }
+    },
+    {
+      "name": "Adjust Account Balance",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"amount\": -100,\n  \"adjustmentId\": \"tx-123-debit\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/accounts/{{accountId}}/adjust",
+          "host": ["{{baseUrl}}"],
+          "path": ["accounts", "{{accountId}}", "adjust"]
+        }
+      }
+    },
+    {
+      "name": "Create FX Quote",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromCurrency\": \"USD\",\n  \"toCurrency\": \"EUR\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/fx/quote",
+          "host": ["{{baseUrl}}"],
+          "path": ["fx", "quote"]
+        }
+      }
+    },
+    {
+      "name": "Get FX Quote",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/fx/quote/{{fxQuoteId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["fx", "quote", "{{fxQuoteId}}"]
+        }
+      }
+    },
+    {
+      "name": "Use FX Quote",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/fx/quote/{{fxQuoteId}}/use",
+          "host": ["{{baseUrl}}"],
+          "path": ["fx", "quote", "{{fxQuoteId}}", "use"]
+        }
+      }
+    },
+    {
+      "name": "Create International Transfer",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"idempotencyKey\": \"transfer-abc123\",\n  \"senderId\": \"sender-wallet-id\",\n  \"receiverId\": \"receiver-wallet-id\",\n  \"amount\": 100,\n  \"fromCurrency\": \"USD\",\n  \"toCurrency\": \"EUR\",\n  \"fxQuoteId\": \"{{fxQuoteId}}\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transactions/transfers/international",
+          "host": ["{{baseUrl}}"],
+          "path": ["transactions", "transfers", "international"]
+        }
+      }
+    },
+    {
+      "name": "Recover Transfer",
+      "request": {
+        "method": "POST",
+        "url": {
+          "raw": "{{baseUrl}}/transactions/transfers/recover/{{transactionId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["transactions", "transfers", "recover", "{{transactionId}}"]
+        }
+      }
+    },
+    {
+      "name": "Submit Bulk Payroll",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"employerId\": \"employer-123\",\n  \"currency\": \"USD\",\n  \"payments\": [\n    { \"employeeId\": \"emp-1\", \"amount\": 1500 },\n    { \"employeeId\": \"emp-2\", \"amount\": 1400 }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/payroll/bulk",
+          "host": ["{{baseUrl}}"],
+          "path": ["payroll", "bulk"]
+        }
+      }
+    }
+  ]
+}

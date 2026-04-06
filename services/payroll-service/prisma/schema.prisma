@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model PayrollJob {
+  id            String   @id @default(uuid())
+  employerId    String   @map("employer_id")
+  totalAmount   Decimal  @db.Decimal(18, 4)
+  currency      String
+  status        String   @default("PENDING") // PENDING, PROCESSING, COMPLETED, FAILED
+  processedCount Int     @default(0) @map("processed_count")
+  totalCount    Int      @map("total_count")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+}

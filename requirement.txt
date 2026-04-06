@@ -1,0 +1,146 @@
+Background Story
+Karim, the lead backend engineer of NovaPay, had spent months preparing for the
+year-end payroll season. Two hundred corporate clients were scheduled to disburse
+salaries simultaneously. Servers were scaled. The team was confident.​
+Then the first call came in.​
+A corporate HR manager reported that 340 employees had received their salaries twice.
+Karim checked the logs. There were none. The client's system had retried the API after a
+timeout, and NovaPay had no idempotency protection. Every retry created a new
+disbursement. The employer's account went $180,000 negative. Overdraft protection
+never triggered because the balance check and the debit ran in two separate queries with
+no lock between them.
+Before Karim could respond, a second crisis surfaced. Employees were seeing money
+credited to their accounts, but transfers were failing. The transaction service had written
+the debit, but crashed before writing the credit. The ledger was unbalanced. Money had
+vanished inside the system with no recovery path.​
+Then the FX team raised an alarm. International transfers initiated at 9:00 am were being
+settled at 9:00 am rates. It was now 10:45 am. Rates had moved. Customers were debited
+at stale prices without warning. One customer lost $320 on a $2,000 transfer.​
+And then the final blow. The transaction history endpoint ran a live query across 40 million
+rows on every page load. Under the surge, the database hit 100% CPU and stopped
+responding. Six hundred thousand users opened the app to find empty balance screens.
+Panic spread on social media within minutes.​
+By 3 am, NovaPay had processed $180,000 in duplicate disbursements, lost $94,000 in
+incomplete transfers, mis-settled 28 international transactions, and crashed the database
+for 22 minutes.
+Karim resigned. The board hired a new team. That team is you.​
+​
+​
+Your
+Mission
+Rebuild the NovaPay transaction backend. Every failure above is
+a requirement. Your system must never again process the same
+disbursement twice, leave the ledger unbalanced after a crash,
+apply a stale FX rate, or recalculate transaction history on every
+request.
+Checkpoint 1: Architecture and Design
+Map all core services. Define clear boundaries, responsibilities, and communication
+patterns. The system must handle traffic bursts exceeding 1,000 requests per second.
+Required Services
+•Account Service: user wallets, balance reads, multi-currency support
+•Transaction Service: initiates, validates, and completes all money movements
+•Ledger Service: double-entry bookkeeping, the source of financial truth
+•FX Service -- fetches rates, issues time-locked quotes (60s TTL), validates quotes
+on use
+•
+Payroll Service: accepts bulk disbursement jobs, processes via queue, and
+tracks progress
+•
+Admin Service: internal panel for operations, compliance, and incident response
+Note: No shared databases between services. All frontend traffic enters through a single API
+gateway. (If you select microservice architecture, then follow this.)
+Produce an architecture diagram. Design data models for each service showing fields, types,
+constraints, and indexes.Core Concept -- Double-Entry Ledger
+Every money movement creates two ledger entries. Money is never created or destroyed.
+User sends $100:
+DEBIT sender_wallet ​ $100
+CREDIT recipient_wallet $100
+NovaPay collects a $2 fee:
+DEBIT sender_wallet ​ $2
+CREDIT novapay_fee_acct $2
+Checkpoint 2: Core Implementation
+Implement all services. No full frontend needed. A minimal UI or Postman collection is
+sufficient. All services must include unit tests. The Docker Compose file must be fully
+self-contained.
+Problem 1: Idempotent DisbursementA corporate client retries the same payroll API call three times after a network timeout. Your
+system must process the disbursement exactly once, regardless of how many times the
+request arrives, even if two retries land simultaneously.
+Handle all five scenarios below and document each one in /decisions.md:
+•Scenario A: Same key arrives twice. Second is discarded. No second debit.
+•Scenario B: Three identical requests arrive within 100ms. Exactly one process.
+Explain the exact mechanism and what happens to the two losing requests at the
+database level.
+•
+Scenario C: Sender is debited. Server crashes before the recipient is credited. On
+recovery, detect and complete or reverse the incomplete transaction. This is the
+atomicity problem.
+•
+Scenario D: Idempotency key expires after 24 hours. Client retries with the same
+key 30 hours later due to a bug. Explain what happens.
+•
+Scenario E: Client sends key-abc for $500, then key-abc for $800. Detect the
+payload mismatch and return a clear error.
+Problem 2: Bulk Payroll
+For bulk payroll, design a BullMQ queue with concurrency set to 1 per employer account.
+Explain why this is better than either locking strategy when 14,000 credits are processed
+against the same source account.
+Problem 3: FX Rate Locking
+A user initiates a $2,000 transfer. The rate is fetched at 9:00 am and applied at 10:45 am. The
+rate has moved. The user loses $320.
+•
+Issue a locked rate quote at the moment of transfer initiation with a 60-second TTL
+•
+Refuse to process if the quote has expired. Return a clear error and force
+re-initiation.
+•Each quote is single-use. One quote equals one transfer, never reusable.
+•Record the exact locked rate on every cross-currency ledger entry
+•If the FX provider is unavailable, return a clear error. Never silently apply a cached
+rate.POST /fx/quote​ Issue a locked rate quote (60s TTL)
+GET /fx/quote/:id​ Check quote validity and time remaining
+POST /transfers/international​
+Execute transfer (requires valid unexpired quote ID)
+Problem 4: Data Security (Field-Level Encryption)
+Sensitive user data must be encrypted at the field level before it is written to the database. Raw
+values must never appear in plaintext in any database column, log line, or API response that
+does not belong to the requesting user. Implement envelope encryption using a two-key
+hierarchy (you can choose whatever encryption you want)
+Checkpoint 3: Observability and Monitoring
+Set up monitoring, logging, and tracing using Docker Compose. Demonstrate end-to-end
+tracing of a complete transfer workflow. Include a test scenario showing system behavior
+when the FX provider goes down mid-transfer.
+•
+Metrics (Prometheus + Grafana): Transaction throughput, failed transaction rate,
+ledger invariant violation count (alert if ever nonzero), API latency p95/p99.
+•
+Logging: Every log line must include requestId, userId, transactionId, and
+timestamp. Never log passwords, tokens, or raw card data.
+•
+Tracing (OpenTelemetry to Jaeger): Demonstrate a full transfer trace end-to-end.
+Show one failure scenario with the FX provider down and where the trace terminates.
+​
+Alert Threshold: Ledger invariant violation count greater than zero must trigger an
+immediate alert. This is a critical data integrity event. A nonzero count means money has
+been created or destroyed inside the system.Checkpoint 4: CI/CD Pipeline
+Use GitHub Actions or any CI tool of your choice.
+•Detect which service has changed by comparing changed file paths to service directories
+•Run tests and build Docker images only for the changed service, not the entire
+repository
+•Block merge if tests fail or the Docker build fails
+•Tag each Docker image with the semantic version from that service's package.json (e.g.
+transaction-service:1.2.0)
+•
+Each service maintains its own version number. A version bump is required alongside
+any code change.
+Deliverables​
+Submit a single GitHub repository with the following structure:
+README Must Include
+•
+Setup instructions and how to run the project•API endpoint summary with one example request and response per endpoint
+•All five idempotency scenarios are explained with exact handling for each
+•Double-entry invariant explanation and how you verify it
+•FX quote strategy including expiry, single-use enforcement, and provider failure
+handling
+•Payroll resumability mechanism with the exact checkpoint pattern used
+•Audit hash chain explanation and what tampered record detection means in practice
+•Tradeoffs made under time pressure
+•What you would add before taking this system to production

@@ -1,0 +1,77 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      account: ${{ steps.filter.outputs.account }}
+      transaction: ${{ steps.filter.outputs.transaction }}
+      ledger: ${{ steps.filter.outputs.ledger }}
+      fx: ${{ steps.filter.outputs.fx }}
+      payroll: ${{ steps.filter.outputs.payroll }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dorny/paths-filter@v2
+        id: filter
+        with:
+          account: "services/account-service/**"
+          transaction: "services/transaction-service/**"
+          ledger: "services/ledger-service/**"
+          fx: "services/fx-service/**"
+          payroll: "services/payroll-service/**"
+
+  build-account:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.account == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd services/account-service && npm install && npm run build
+      - name: Build Docker Image
+        run: docker build -t novapay/account-service:${{ github.sha }} -f services/account-service/Dockerfile .
+
+  build-transaction:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.transaction == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd services/transaction-service && npm install && npm run build
+      - name: Build Docker Image
+        run: docker build -t novapay/transaction-service:${{ github.sha }} -f services/transaction-service/Dockerfile .
+
+  build-ledger:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.ledger == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd services/ledger-service && npm install && npm run build
+      - name: Build Docker Image
+        run: docker build -t novapay/ledger-service:${{ github.sha }} -f services/ledger-service/Dockerfile .
+
+  build-fx:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.fx == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd services/fx-service && npm install && npm run build
+      - name: Build Docker Image
+        run: docker build -t novapay/fx-service:${{ github.sha }} -f services/fx-service/Dockerfile .
+
+  build-payroll:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.payroll == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - run: cd services/payroll-service && npm install && npm run build
+      - name: Build Docker Image
+        run: docker build -t novapay/payroll-service:${{ github.sha }} -f services/payroll-service/Dockerfile .

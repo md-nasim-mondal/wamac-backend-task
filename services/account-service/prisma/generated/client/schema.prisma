@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./generated/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Wallet {
+  id           String   @id @default(uuid()) @map("wallet_id")
+  userId       String   @map("user_id") // Could be encrypted at app level
+  currencyCode String   @map("currency_code")
+  balance      Decimal  @default(0) @map("balance") @db.Decimal(18, 4)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([currencyCode])
+}
