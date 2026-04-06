@@ -4,6 +4,43 @@
 
 This repository contains a microservices-based backend for NovaPay with separate services for accounts, transactions, ledger, FX quotes, payroll, and admin. The stack is self-contained in `docker-compose.yml` with Postgres, Redis, Prometheus, Grafana, Jaeger, and an NGINX gateway.
 
+## Requirements Fulfillment
+
+✅ **Checkpoint 1 - Architecture & Design**
+- 6 separate microservices with dedicated databases (Account, Transaction, Ledger, FX, Payroll, Admin)
+- Clear service boundaries via REST APIs
+- Data models with constraints and indexes in Prisma schemas
+- Architecture diagram (Mermaid) showing service dependencies and data flow
+
+✅ **Checkpoint 2 - Core Implementation**
+- All services implemented with modular architecture (routes → controllers → services)
+- Unit tests for all 6 services (13 test cases, all passing)
+- All five idempotency scenarios documented in [decisions.md](decisions.md)
+- Double-entry ledger invariant enforcement with audit hash chain
+- FX rate locking with 60s TTL and single-use quotes
+- BullMQ payroll queue with concurrency=1 per employer
+- Self-contained Docker Compose with all dependencies
+
+✅ **Checkpoint 3 - Observability & Monitoring**
+- Prometheus metrics in all services (transaction throughput, latency, ledger violations)
+- Grafana dashboards for monitoring
+- OpenTelemetry/Jaeger distributed tracing integration
+- Request ID, User ID, and Transaction ID in all log lines
+- Audit hash chain for tamper detection
+
+✅ **Checkpoint 4 - CI/CD Pipeline**
+- GitHub Actions workflow with path-based change detection
+- Selective builds (only changed services)
+- Automated Docker image tagging with service version from package.json
+- Test execution and build validation on every PR
+
+✅ **Additional Features**
+- Field-level encryption (AES-256-GCM envelope encryption) for sensitive data
+- Idempotency key hashing for payload integrity verification
+- Cross-service transaction recovery
+- Admin panel for operations and system health checks
+- Postman collection for API testing
+
 ## Service Architecture
 
 Each service follows a modular structure under `services/<service>/src/`:
@@ -18,6 +55,44 @@ Each service follows a modular structure under `services/<service>/src/`:
 - `src/index.ts` — lightweight export for test compatibility
 
 This modular layout keeps controller, service, and route logic separated and easier to maintain.
+
+### Service Folder Structure
+
+```
+services/
+├── account-service/
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── modules/account/
+│   │   │   │   ├── account.controller.ts
+│   │   │   │   ├── account.service.ts
+│   │   │   │   └── account.route.ts
+│   │   │   ├── interfaces/
+│   │   │   │   └── account.interface.ts
+│   │   │   ├── utils/
+│   │   │   │   └── encryption.ts
+│   │   │   └── routes/
+│   │   │       └── index.ts
+│   │   ├── config/
+│   │   │   └── index.ts
+│   │   ├── shared/
+│   │   │   ├── prisma.ts
+│   │   │   ├── sendResponse.ts
+│   │   │   └── catchAsync.ts
+│   │   ├── app.ts
+│   │   ├── server.ts
+│   │   └── index.ts
+│   ├── prisma/
+│   │   ├── schema.prisma
+│   │   └── generated/client/
+│   ├── package.json
+│   └── Dockerfile
+├── transaction-service/
+├── ledger-service/
+├── fx-service/
+├── payroll-service/
+└── admin-service/
+```
 
 ```mermaid
 graph TD
@@ -169,6 +244,26 @@ pnpm run dev
 - FX service: `http://localhost:3004`
 - Payroll service: `http://localhost:3005`
 - Admin service: `http://localhost:3006`
+
+## Testing
+
+Run all workspace tests:
+
+```bash
+pnpm test
+```
+
+Run tests for a specific service:
+
+```bash
+pnpm run test --workspace=account-service
+```
+
+Run type checking:
+
+```bash
+pnpm run build
+```
 
 ## API Endpoints
 

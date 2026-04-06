@@ -38,7 +38,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/account-service && npm install && npm run build && npm test
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm run build --workspace=account-service
+      - run: pnpm run test --workspace=account-service
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/account-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -51,7 +60,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/transaction-service && npm install && npm run build && npm test
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm run build --workspace=transaction-service
+      - run: pnpm run test --workspace=transaction-service
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/transaction-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -64,7 +82,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/ledger-service && npm install && npm run build && npm test
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm run build --workspace=ledger-service
+      - run: pnpm run test --workspace=ledger-service
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/ledger-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -77,7 +104,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/fx-service && npm install && npm run build && npm test
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm run build --workspace=fx-service
+      - run: pnpm run test --workspace=fx-service
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/fx-service/package.json').version")" >> $GITHUB_OUTPUT
@@ -90,7 +126,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/payroll-service && npm install && npm run build && npm test
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm run build --workspace=payroll-service
+      - run: pnpm run test --workspace=payroll-service
       - name: Get version
         id: version
         run: echo "version=$(node -p "require('./services/payroll-service/package.json').version")" >> $GITHUB_OUTPUT
