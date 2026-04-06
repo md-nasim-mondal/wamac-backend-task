@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction, Request, Response } from "express";
 import cors from "cors";
 import crypto from "crypto";
 import client from "prom-client";
@@ -26,5 +26,24 @@ app.get("/metrics", async (req, res) => {
 });
 
 app.use("/", routes);
+
+const globalErrorHandler = (
+  err: any,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  const status = err.status || 500;
+  const message = err.message || "Internal Server Error";
+  console.error(err);
+  res.status(status).json({ error: message });
+};
+
+const notFound = (req: Request, res: Response) => {
+  res.status(404).json({ error: "Route not found" });
+};
+
+app.use(globalErrorHandler);
+app.use(notFound);
 
 export default app;

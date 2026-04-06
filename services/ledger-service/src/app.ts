@@ -52,4 +52,10 @@ app.use(
   },
 );
 
+const notFound = (req: express.Request, res: express.Response) => {
+  res.status(404).json({ error: "Route not found" });
+};
+
+app.use(notFound);
+
 export default app;
