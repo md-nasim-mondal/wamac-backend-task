@@ -15,6 +15,7 @@ jobs:
       ledger: ${{ steps.filter.outputs.ledger }}
       fx: ${{ steps.filter.outputs.fx }}
       payroll: ${{ steps.filter.outputs.payroll }}
+      admin: ${{ steps.filter.outputs.admin }}
     steps:
       - uses: actions/checkout@v3
       - uses: dorny/paths-filter@v2
@@ -31,6 +32,8 @@ jobs:
               - 'services/fx-service/**'
             payroll:
               - 'services/payroll-service/**'
+            admin:
+              - 'services/admin-service/**'
 
   build-account:
     needs: detect-changes
@@ -45,7 +48,8 @@ jobs:
         with:
           node-version: "18"
           cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run prisma:generate --workspace=account-service
       - run: pnpm run build --workspace=account-service
       - run: pnpm run test --workspace=account-service
       - name: Get version
@@ -67,7 +71,8 @@ jobs:
         with:
           node-version: "18"
           cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run prisma:generate --workspace=transaction-service
       - run: pnpm run build --workspace=transaction-service
       - run: pnpm run test --workspace=transaction-service
       - name: Get version
@@ -89,7 +94,8 @@ jobs:
         with:
           node-version: "18"
           cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run prisma:generate --workspace=ledger-service
       - run: pnpm run build --workspace=ledger-service
       - run: pnpm run test --workspace=ledger-service
       - name: Get version
@@ -111,7 +117,8 @@ jobs:
         with:
           node-version: "18"
           cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run prisma:generate --workspace=fx-service
       - run: pnpm run build --workspace=fx-service
       - run: pnpm run test --workspace=fx-service
       - name: Get version
@@ -133,7 +140,8 @@ jobs:
         with:
           node-version: "18"
           cache: "pnpm"
-      - run: pnpm install
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run prisma:generate --workspace=payroll-service
       - run: pnpm run build --workspace=payroll-service
       - run: pnpm run test --workspace=payroll-service
       - name: Get version
@@ -141,3 +149,26 @@ jobs:
         run: echo "version=$(node -p "require('./services/payroll-service/package.json').version")" >> $GITHUB_OUTPUT
       - name: Build Docker Image
         run: docker build -t novapay/payroll-service:${{ steps.version.outputs.version }} -f services/payroll-service/Dockerfile .
+
+  build-admin:
+    needs: detect-changes
+    if: ${{ needs.detect-changes.outputs.admin == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: pnpm/action-setup@v2
+        with:
+          version: latest
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm run prisma:generate --workspace=admin-service
+      - run: pnpm run build --workspace=admin-service
+      - run: pnpm run test --workspace=admin-service
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./services/admin-service/package.json').version")" >> $GITHUB_OUTPUT
+      - name: Build Docker Image
+        run: docker build -t novapay/admin-service:${{ steps.version.outputs.version }} -f services/admin-service/Dockerfile .
