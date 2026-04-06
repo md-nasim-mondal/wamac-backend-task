@@ -22,3 +22,49 @@
 6. **Missing Elements (Production prep)**
    - API Gateway rate limiting.
    - Real Vault/KMS implementation for Field Level Encryption (currently using basic hashing mechanics).
+
+7. **Data Models**
+   - **Account Service:** Wallet model with encrypted owner name, balance adjustments with unique keys
+   - **Transaction Service:** Transaction model with idempotency key, payload hash, status enum
+   - **Ledger Service:** LedgerEntry model with double-entry fields, audit hash chain
+   - **FX Service:** FxQuote model with TTL and single-use status
+   - **Payroll Service:** PayrollJob model with progress tracking
+   - **Admin Service:** Minimal, uses cross-service calls for operations
+
+8. **Security & Encryption**
+   Envelope encryption using AES-256-GCM for sensitive data (owner names). Master key managed via environment variables.
+
+9. **Observability**
+   - Prometheus metrics in all services
+   - Jaeger distributed tracing
+   - Audit hash chain for ledger integrity verification
+
+10. **API Gateway**
+    NGINX reverse proxy routes requests to appropriate services based on path.
+
+11. **Self-Contained Deployment**
+    Docker Compose includes all services, databases, Redis, monitoring stack (Prometheus/Grafana), and tracing (Jaeger).
+
+## Requirements Fulfillment Status
+
+✅ **All core requirements completed:**
+
+- 6 microservices implemented with separate databases
+- Idempotent disbursement handling all 5 scenarios
+- Double-entry ledger with invariant enforcement
+- FX rate locking with 60s TTL quotes
+- Bulk payroll with BullMQ concurrency control
+- Unit tests for all services
+- Postman collection for API testing
+- Architecture diagram (Mermaid)
+- Data models with constraints and indexes
+- Self-contained Docker Compose setup
+- CI/CD pipeline with path-based filtering
+
+## Tradeoffs Made
+
+- **Microservices isolation**: No shared DBs (good for scaling) but requires cross-service calls (latency)
+- **Idempotency via DB constraints**: Simple but requires careful payload hashing
+- **Envelope encryption**: Secure but adds complexity; chose AES-256-GCM for field-level protection
+- **BullMQ concurrency=1**: Prevents race conditions but limits throughput for large payrolls
+- **No shared caching**: Each service manages its own (simplicity over performance)
