@@ -32,9 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/account-service && npm install && npm run build
+      - run: cd services/account-service && npm install && npm run build && npm test
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./services/account-service/package.json').version")" >> $GITHUB_OUTPUT
       - name: Build Docker Image
-        run: docker build -t novapay/account-service:${{ github.sha }} -f services/account-service/Dockerfile .
+        run: docker build -t novapay/account-service:${{ steps.version.outputs.version }} -f services/account-service/Dockerfile .
 
   build-transaction:
     needs: detect-changes
@@ -42,9 +45,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/transaction-service && npm install && npm run build
+      - run: cd services/transaction-service && npm install && npm run build && npm test
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./services/transaction-service/package.json').version")" >> $GITHUB_OUTPUT
       - name: Build Docker Image
-        run: docker build -t novapay/transaction-service:${{ github.sha }} -f services/transaction-service/Dockerfile .
+        run: docker build -t novapay/transaction-service:${{ steps.version.outputs.version }} -f services/transaction-service/Dockerfile .
 
   build-ledger:
     needs: detect-changes
@@ -52,9 +58,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/ledger-service && npm install && npm run build
+      - run: cd services/ledger-service && npm install && npm run build && npm test
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./services/ledger-service/package.json').version")" >> $GITHUB_OUTPUT
       - name: Build Docker Image
-        run: docker build -t novapay/ledger-service:${{ github.sha }} -f services/ledger-service/Dockerfile .
+        run: docker build -t novapay/ledger-service:${{ steps.version.outputs.version }} -f services/ledger-service/Dockerfile .
 
   build-fx:
     needs: detect-changes
@@ -62,9 +71,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/fx-service && npm install && npm run build
+      - run: cd services/fx-service && npm install && npm run build && npm test
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./services/fx-service/package.json').version")" >> $GITHUB_OUTPUT
       - name: Build Docker Image
-        run: docker build -t novapay/fx-service:${{ github.sha }} -f services/fx-service/Dockerfile .
+        run: docker build -t novapay/fx-service:${{ steps.version.outputs.version }} -f services/fx-service/Dockerfile .
 
   build-payroll:
     needs: detect-changes
@@ -72,6 +84,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - run: cd services/payroll-service && npm install && npm run build
+      - run: cd services/payroll-service && npm install && npm run build && npm test
+      - name: Get version
+        id: version
+        run: echo "version=$(node -p "require('./services/payroll-service/package.json').version")" >> $GITHUB_OUTPUT
       - name: Build Docker Image
-        run: docker build -t novapay/payroll-service:${{ github.sha }} -f services/payroll-service/Dockerfile .
+        run: docker build -t novapay/payroll-service:${{ steps.version.outputs.version }} -f services/payroll-service/Dockerfile .

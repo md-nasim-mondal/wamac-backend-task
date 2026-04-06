@@ -9,8 +9,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import client from "prom-client";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+if (process.env.NODE_ENV !== "test") {
+  require("../../../tracing");
+}
 
-const app = express();
+export const app = express();
 const pool = new Pool({ connectionString: process.env.ACCOUNT_DB_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
@@ -229,6 +232,8 @@ app.get("/accounts/:id/secret", async (req, res) => {
 });
 
 const port = process.env.ACCOUNT_PORT || 3001;
-app.listen(port, () =>
-  console.log("Account-service listening on port " + port),
-);
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () =>
+    console.log("Account-service listening on port " + port),
+  );
+}

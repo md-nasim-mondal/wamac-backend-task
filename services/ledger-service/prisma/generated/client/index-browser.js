@@ -129,6 +129,7 @@ exports.Prisma.LedgerEntryScalarFieldEnum = {
   currency: 'currency',
   fxQuoteId: 'fxQuoteId',
   fxRate: 'fxRate',
+  auditHash: 'auditHash',
   createdAt: 'createdAt'
 };
 

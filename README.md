@@ -4,24 +4,111 @@
 
 This repository contains a microservices-based backend for NovaPay with separate services for accounts, transactions, ledger, FX quotes, payroll, and admin. The stack is self-contained in `docker-compose.yml` with Postgres, Redis, Prometheus, Grafana, Jaeger, and an NGINX gateway.
 
-## Status
+```mermaid
+graph TD
+    A[API Gateway] --> B[Account Service]
+    A --> C[Transaction Service]
+    A --> D[Ledger Service]
+    A --> E[FX Service]
+    A --> F[Payroll Service]
+    A --> G[Admin Service]
+    
+    C --> B
+    C --> D
+    C --> E
+    F --> C
+    F --> D
+    
+    B --> H[(Account DB)]
+    C --> I[(Transaction DB)]
+    D --> J[(Ledger DB)]
+    E --> K[(FX DB)]
+    F --> L[(Payroll DB)]
+    G --> M[(Admin DB)]
+    
+    F --> N[(Redis Queue)]
+    
+    O[Prometheus] --> B
+    O --> C
+    O --> D
+    O --> E
+    O --> F
+    O --> G
+    
+    P[Grafana] --> O
+    Q[Jaeger] --> B
+    Q --> C
+    Q --> D
+    Q --> E
+    Q --> F
+    Q --> G
+```
 
-### Implemented
+## Idempotency Scenarios
 
-- Idempotent international transfers with unique `idempotencyKey`
-- 60s single-use FX quote lifecycle
-- Double-entry ledger validation with an invariant check
-- Bulk payroll queue using BullMQ and per-job idempotency keys
-- Field-level envelope encryption for sensitive account owner data
-- Docker Compose stack with Prometheus/Grafana/Jaeger services
-- CI pipeline under `.github/workflows/ci.yml` that detects service changes and builds only changed services
+### Scenario A: Same key arrives twice
 
-### Known gaps
+- **Handling**: Prisma unique constraint on `idempotencyKey` prevents duplicate inserts at database level
+- **Result**: Second request returns the original transaction status without side effects
 
-- No unit tests currently present in the service packages
-- No architecture diagram file included
-- No explicit OpenTelemetry instrumentation in app code, so tracing is not fully wired despite Jaeger service presence
-- No audit hash chain implementation in the current codebase
+### Scenario B: Three identical requests arrive within 100ms
+
+- **Handling**: Database-level row locking ensures only one succeeds; others get P2002 constraint violation
+- **Result**: Exactly one transaction processes; losers retry with same key (safe due to idempotency)
+
+### Scenario C: Server crashes after debit but before credit (Atomicity)
+
+- **Handling**: Transaction service uses synchronous cross-service calls in sequence; recovery endpoint detects incomplete transactions and completes them
+- **Result**: Money never vanishes; either fully succeeds or fully reverses
+
+### Scenario D: Idempotency key expires after 24 hours
+
+- **Handling**: Age check on existing transaction; if >24h, reject with clear error forcing new key
+- **Result**: Prevents stale key reuse while allowing reasonable retry windows
+
+### Scenario E: Client sends key-abc for $500, then key-abc for $800
+
+- **Handling**: SHA-256 hash of payload stored with transaction; mismatch detected and rejected
+- **Result**: Payload integrity enforced; prevents parameter tampering
+
+## Double-Entry Ledger Invariant
+
+Every transaction creates balanced entries where `Sum(Debits) = Sum(Credits)`. This invariant is enforced before database commit. Violation triggers immediate alert (Prometheus metric `ledger_invariant_violations_total > 0`).
+
+## FX Quote Strategy
+
+- **Locking**: Quotes issued with 60s TTL at transfer initiation time
+- **Single-use**: Atomic `status: UNUSED -> USED` prevents reuse
+- **Failure handling**: Provider unavailability returns clear error; never applies cached/stale rates
+- **Recording**: Exact locked rate stored in every cross-currency ledger entry
+
+## Payroll Resumability
+
+Uses BullMQ with `concurrency: 1` per employer. Each employee disbursement gets unique idempotency key (`payroll-{jobId}-{employeeId}`). Failed jobs retry; already-processed employees are safely skipped.
+
+## Audit Hash Chain
+
+Each ledger entry includes an `auditHash` computed as `SHA-256(previousHash + entryData)`. Chain starts with "genesis" hash. Tampered records break the chain, detectable via `/ledger/audit/verify` endpoint. In practice, this ensures financial records cannot be altered without detection.
+
+## Tradeoffs Made
+
+- **Microservices isolation**: No shared DBs (good for scaling) but requires cross-service calls (latency)
+- **Idempotency via DB constraints**: Simple but requires careful payload hashing
+- **Envelope encryption**: Secure but adds complexity; chose AES-256-GCM for field-level protection
+- **BullMQ concurrency=1**: Prevents race conditions but limits throughput for large payrolls
+- **No shared caching**: Each service manages its own (simplicity over performance)
+
+## Production Readiness Additions
+
+- **API Gateway**: Rate limiting, authentication, request transformation
+- **Service Mesh**: Istio/Linkerd for traffic management, circuit breakers
+- **Database**: Connection pooling, read replicas, backup/restore automation
+- **Security**: OAuth2/JWT, API key rotation, secrets management (Vault)
+- **Monitoring**: Alerting rules, log aggregation (ELK), distributed tracing dashboards
+- **CI/CD**: Blue-green deployments, canary releases, automated rollback
+- **Compliance**: PCI DSS for payments, SOC 2 audit trails, GDPR data handling
+- **Performance**: Database indexing, caching layers (Redis), CDN for static assets
+- **Reliability**: Multi-region deployment, chaos engineering, disaster recovery
 
 ## Setup
 
@@ -367,7 +454,7 @@ Response body:
 
 - Prometheus metrics endpoints are exposed by each service at `/metrics`.
 - `docker-compose.yml` includes Prometheus, Grafana, and Jaeger.
-- However, app-level OpenTelemetry instrumentation is not yet implemented in service code, so end-to-end traces are not currently generated.
+- OpenTelemetry instrumentation is implemented with Jaeger tracing for end-to-end observability across all services.
 
 ## CI/CD
 

@@ -11,8 +11,11 @@ import axios from "axios";
 import client from "prom-client";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+if (process.env.NODE_ENV !== "test") {
+  require("../../../tracing");
+}
 
-const app = express();
+export const app = express();
 const pool = new Pool({ connectionString: process.env.PAYROLL_DB_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
@@ -148,6 +151,8 @@ const payrollWorker = new Worker(
 );
 
 const port = process.env.PAYROLL_PORT || 3005;
-app.listen(port, () =>
-  console.log("Payroll-service listening on port " + port),
-);
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () =>
+    console.log("Payroll-service listening on port " + port),
+  );
+}

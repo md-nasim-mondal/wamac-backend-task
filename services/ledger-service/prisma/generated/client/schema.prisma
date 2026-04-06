@@ -16,6 +16,7 @@ model LedgerEntry {
   currency      String   @map("currency")
   fxQuoteId     String?  @map("fx_quote_id")
   fxRate        Decimal? @map("fx_rate") @db.Decimal(18, 4)
+  auditHash     String   @map("audit_hash")
   createdAt     DateTime @default(now()) @map("created_at")
 
   @@index([transactionId])

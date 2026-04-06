@@ -10,8 +10,11 @@ import axios from "axios";
 import path from "path";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+if (process.env.NODE_ENV !== "test") {
+  require("../../../tracing");
+}
 
-const app = express();
+export const app = express();
 const pool = new Pool({ connectionString: process.env.TRANSACTION_DB_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
@@ -296,6 +299,8 @@ app.post("/transfers/recover/:id", async (req, res) => {
 });
 
 const port = process.env.TRANSACTION_PORT || 3002;
-app.listen(port, () =>
-  console.log("Transaction-service listening on port " + port),
-);
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () =>
+    console.log("Transaction-service listening on port " + port),
+  );
+}

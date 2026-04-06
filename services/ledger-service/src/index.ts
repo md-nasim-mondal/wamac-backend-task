@@ -2,14 +2,18 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import path from "path";
+import crypto from "crypto";
 import { PrismaClient } from "../prisma/generated/client";
 import { Pool } from "pg";
 import { PrismaPg } from "@prisma/adapter-pg";
 import client from "prom-client";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+if (process.env.NODE_ENV !== "test") {
+  require("../../../tracing");
+}
 
-const app = express();
+export const app = express();
 const pool = new Pool({ connectionString: process.env.LEDGER_DB_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
@@ -59,8 +63,38 @@ app.post("/ledger/entries", async (req, res) => {
   }
 
   try {
+    // Get the last audit hash for chaining
+    const lastEntry = await prisma.ledgerEntry.findFirst({
+      orderBy: { createdAt: "desc" },
+    });
+    let previousHash = lastEntry?.auditHash || "genesis";
+
+    const entriesWithHashes = [];
+    for (const entry of entries) {
+      const entryData = JSON.stringify({
+        transactionId,
+        accountId: entry.accountId,
+        debitAmount: entry.debitAmount || 0,
+        creditAmount: entry.creditAmount || 0,
+        currency: entry.currency,
+        fxQuoteId: entry.fxQuoteId || null,
+        fxRate: entry.fxRate || null,
+      });
+      const chainInput = previousHash + entryData;
+      const auditHash = crypto
+        .createHash("sha256")
+        .update(chainInput)
+        .digest("hex");
+      previousHash = auditHash; // Update for next entry
+
+      entriesWithHashes.push({
+        ...entry,
+        auditHash,
+      });
+    }
+
     await prisma.$transaction(
-      entries.map((entry: any) =>
+      entriesWithHashes.map((entry: any) =>
         prisma.ledgerEntry.create({
           data: {
             transactionId,
@@ -70,6 +104,7 @@ app.post("/ledger/entries", async (req, res) => {
             currency: entry.currency,
             fxQuoteId: entry.fxQuoteId || null,
             fxRate: entry.fxRate || null,
+            auditHash: entry.auditHash,
           },
         }),
       ),
@@ -97,5 +132,56 @@ app.get("/ledger/transaction/:transactionId", async (req, res) => {
   }
 });
 
+app.get("/ledger/audit/verify", async (req, res) => {
+  try {
+    const allEntries = await prisma.ledgerEntry.findMany({
+      orderBy: { createdAt: "asc" },
+    });
+
+    let previousHash = "genesis";
+    let tampered = false;
+    const issues = [];
+
+    for (const entry of allEntries) {
+      const entryData = JSON.stringify({
+        transactionId: entry.transactionId,
+        accountId: entry.accountId,
+        debitAmount: Number(entry.debitAmount),
+        creditAmount: Number(entry.creditAmount),
+        currency: entry.currency,
+        fxQuoteId: entry.fxQuoteId,
+        fxRate: entry.fxRate ? Number(entry.fxRate) : null,
+      });
+      const expectedHash = crypto
+        .createHash("sha256")
+        .update(previousHash + entryData)
+        .digest("hex");
+
+      if (expectedHash !== entry.auditHash) {
+        tampered = true;
+        issues.push({
+          id: entry.id,
+          expected: expectedHash,
+          actual: entry.auditHash,
+        });
+      }
+      previousHash = entry.auditHash;
+    }
+
+    res.json({
+      totalEntries: allEntries.length,
+      chainValid: !tampered,
+      issues,
+    });
+  } catch (err) {
+    console.error("Audit verification failed", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 const port = process.env.LEDGER_PORT || 3003;
-app.listen(port, () => console.log("Ledger-service listening on port " + port));
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () =>
+    console.log("Ledger-service listening on port " + port),
+  );
+}

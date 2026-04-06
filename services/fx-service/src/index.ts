@@ -8,8 +8,11 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import client from "prom-client";
 
 dotenv.config({ path: path.resolve(__dirname, "../../../.env") });
+if (process.env.NODE_ENV !== "test") {
+  require("../../../tracing");
+}
 
-const app = express();
+export const app = express();
 const pool = new Pool({ connectionString: process.env.FX_DB_URL });
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
@@ -100,4 +103,6 @@ app.post("/fx/quote/:id/use", async (req, res) => {
 });
 
 const port = process.env.FX_PORT || 3004;
-app.listen(port, () => console.log("Fx-service listening on port " + port));
+if (process.env.NODE_ENV !== "test") {
+  app.listen(port, () => console.log("Fx-service listening on port " + port));
+}

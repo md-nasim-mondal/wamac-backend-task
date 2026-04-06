@@ -899,6 +899,7 @@ export namespace Prisma {
     currency: string | null
     fxQuoteId: string | null
     fxRate: Decimal | null
+    auditHash: string | null
     createdAt: Date | null
   }
 
@@ -911,6 +912,7 @@ export namespace Prisma {
     currency: string | null
     fxQuoteId: string | null
     fxRate: Decimal | null
+    auditHash: string | null
     createdAt: Date | null
   }
 
@@ -923,6 +925,7 @@ export namespace Prisma {
     currency: number
     fxQuoteId: number
     fxRate: number
+    auditHash: number
     createdAt: number
     _all: number
   }
@@ -949,6 +952,7 @@ export namespace Prisma {
     currency?: true
     fxQuoteId?: true
     fxRate?: true
+    auditHash?: true
     createdAt?: true
   }
 
@@ -961,6 +965,7 @@ export namespace Prisma {
     currency?: true
     fxQuoteId?: true
     fxRate?: true
+    auditHash?: true
     createdAt?: true
   }
 
@@ -973,6 +978,7 @@ export namespace Prisma {
     currency?: true
     fxQuoteId?: true
     fxRate?: true
+    auditHash?: true
     createdAt?: true
     _all?: true
   }
@@ -1072,6 +1078,7 @@ export namespace Prisma {
     currency: string
     fxQuoteId: string | null
     fxRate: Decimal | null
+    auditHash: string
     createdAt: Date
     _count: LedgerEntryCountAggregateOutputType | null
     _avg: LedgerEntryAvgAggregateOutputType | null
@@ -1103,6 +1110,7 @@ export namespace Prisma {
     currency?: boolean
     fxQuoteId?: boolean
     fxRate?: boolean
+    auditHash?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["ledgerEntry"]>
 
@@ -1115,6 +1123,7 @@ export namespace Prisma {
     currency?: boolean
     fxQuoteId?: boolean
     fxRate?: boolean
+    auditHash?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["ledgerEntry"]>
 
@@ -1127,6 +1136,7 @@ export namespace Prisma {
     currency?: boolean
     fxQuoteId?: boolean
     fxRate?: boolean
+    auditHash?: boolean
     createdAt?: boolean
   }, ExtArgs["result"]["ledgerEntry"]>
 
@@ -1139,10 +1149,11 @@ export namespace Prisma {
     currency?: boolean
     fxQuoteId?: boolean
     fxRate?: boolean
+    auditHash?: boolean
     createdAt?: boolean
   }
 
-  export type LedgerEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transactionId" | "accountId" | "debitAmount" | "creditAmount" | "currency" | "fxQuoteId" | "fxRate" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
+  export type LedgerEntryOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transactionId" | "accountId" | "debitAmount" | "creditAmount" | "currency" | "fxQuoteId" | "fxRate" | "auditHash" | "createdAt", ExtArgs["result"]["ledgerEntry"]>
 
   export type $LedgerEntryPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "LedgerEntry"
@@ -1156,6 +1167,7 @@ export namespace Prisma {
       currency: string
       fxQuoteId: string | null
       fxRate: Prisma.Decimal | null
+      auditHash: string
       createdAt: Date
     }, ExtArgs["result"]["ledgerEntry"]>
     composites: {}
@@ -1588,6 +1600,7 @@ export namespace Prisma {
     readonly currency: FieldRef<"LedgerEntry", 'String'>
     readonly fxQuoteId: FieldRef<"LedgerEntry", 'String'>
     readonly fxRate: FieldRef<"LedgerEntry", 'Decimal'>
+    readonly auditHash: FieldRef<"LedgerEntry", 'String'>
     readonly createdAt: FieldRef<"LedgerEntry", 'DateTime'>
   }
     
@@ -1983,6 +1996,7 @@ export namespace Prisma {
     currency: 'currency',
     fxQuoteId: 'fxQuoteId',
     fxRate: 'fxRate',
+    auditHash: 'auditHash',
     createdAt: 'createdAt'
   };
 
@@ -2089,6 +2103,7 @@ export namespace Prisma {
     currency?: StringFilter<"LedgerEntry"> | string
     fxQuoteId?: StringNullableFilter<"LedgerEntry"> | string | null
     fxRate?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringFilter<"LedgerEntry"> | string
     createdAt?: DateTimeFilter<"LedgerEntry"> | Date | string
   }
 
@@ -2101,6 +2116,7 @@ export namespace Prisma {
     currency?: SortOrder
     fxQuoteId?: SortOrderInput | SortOrder
     fxRate?: SortOrderInput | SortOrder
+    auditHash?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -2116,6 +2132,7 @@ export namespace Prisma {
     currency?: StringFilter<"LedgerEntry"> | string
     fxQuoteId?: StringNullableFilter<"LedgerEntry"> | string | null
     fxRate?: DecimalNullableFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringFilter<"LedgerEntry"> | string
     createdAt?: DateTimeFilter<"LedgerEntry"> | Date | string
   }, "id">
 
@@ -2128,6 +2145,7 @@ export namespace Prisma {
     currency?: SortOrder
     fxQuoteId?: SortOrderInput | SortOrder
     fxRate?: SortOrderInput | SortOrder
+    auditHash?: SortOrder
     createdAt?: SortOrder
     _count?: LedgerEntryCountOrderByAggregateInput
     _avg?: LedgerEntryAvgOrderByAggregateInput
@@ -2148,6 +2166,7 @@ export namespace Prisma {
     currency?: StringWithAggregatesFilter<"LedgerEntry"> | string
     fxQuoteId?: StringNullableWithAggregatesFilter<"LedgerEntry"> | string | null
     fxRate?: DecimalNullableWithAggregatesFilter<"LedgerEntry"> | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringWithAggregatesFilter<"LedgerEntry"> | string
     createdAt?: DateTimeWithAggregatesFilter<"LedgerEntry"> | Date | string
   }
 
@@ -2160,6 +2179,7 @@ export namespace Prisma {
     currency: string
     fxQuoteId?: string | null
     fxRate?: Decimal | DecimalJsLike | number | string | null
+    auditHash: string
     createdAt?: Date | string
   }
 
@@ -2172,6 +2192,7 @@ export namespace Prisma {
     currency: string
     fxQuoteId?: string | null
     fxRate?: Decimal | DecimalJsLike | number | string | null
+    auditHash: string
     createdAt?: Date | string
   }
 
@@ -2184,6 +2205,7 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     fxQuoteId?: NullableStringFieldUpdateOperationsInput | string | null
     fxRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2196,6 +2218,7 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     fxQuoteId?: NullableStringFieldUpdateOperationsInput | string | null
     fxRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2208,6 +2231,7 @@ export namespace Prisma {
     currency: string
     fxQuoteId?: string | null
     fxRate?: Decimal | DecimalJsLike | number | string | null
+    auditHash: string
     createdAt?: Date | string
   }
 
@@ -2220,6 +2244,7 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     fxQuoteId?: NullableStringFieldUpdateOperationsInput | string | null
     fxRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2232,6 +2257,7 @@ export namespace Prisma {
     currency?: StringFieldUpdateOperationsInput | string
     fxQuoteId?: NullableStringFieldUpdateOperationsInput | string | null
     fxRate?: NullableDecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string | null
+    auditHash?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -2312,6 +2338,7 @@ export namespace Prisma {
     currency?: SortOrder
     fxQuoteId?: SortOrder
     fxRate?: SortOrder
+    auditHash?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -2330,6 +2357,7 @@ export namespace Prisma {
     currency?: SortOrder
     fxQuoteId?: SortOrder
     fxRate?: SortOrder
+    auditHash?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -2342,6 +2370,7 @@ export namespace Prisma {
     currency?: SortOrder
     fxQuoteId?: SortOrder
     fxRate?: SortOrder
+    auditHash?: SortOrder
     createdAt?: SortOrder
   }
 
