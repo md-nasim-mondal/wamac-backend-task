@@ -6,4 +6,7 @@ dist
 
 .vscode/
 
-/src/generated/prisma
+# Generated files
+services/*/dist/
+services/*/prisma/generated/
+src/generated/prisma
