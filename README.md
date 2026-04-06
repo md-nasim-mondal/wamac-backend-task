@@ -4,6 +4,21 @@
 
 This repository contains a microservices-based backend for NovaPay with separate services for accounts, transactions, ledger, FX quotes, payroll, and admin. The stack is self-contained in `docker-compose.yml` with Postgres, Redis, Prometheus, Grafana, Jaeger, and an NGINX gateway.
 
+## Service Architecture
+
+Each service follows a modular structure under `services/<service>/src/`:
+
+- `src/server.ts` — app entrypoint and HTTP listener
+- `src/app.ts` — Express application setup
+- `src/app/routes/` — route registration
+- `src/app/modules/` — domain-specific controllers and service logic
+- `src/app/interfaces/` — request/response and domain types
+- `src/config/` — environment and service config
+- `src/shared/` — shared helpers and utilities
+- `src/index.ts` — lightweight export for test compatibility
+
+This modular layout keeps controller, service, and route logic separated and easier to maintain.
+
 ```mermaid
 graph TD
     A[API Gateway] --> B[Account Service]
@@ -112,24 +127,38 @@ Each ledger entry includes an `auditHash` computed as `SHA-256(previousHash + en
 
 ## Setup
 
-1. Copy environment variables:
+1. Install dependencies:
+
+```bash
+pnpm install
+```
+
+2. Copy environment variables:
 
 ```bash
 cp .env.example .env
 ```
 
-2. Start the full stack:
+3. Start the full stack with Docker Compose:
 
 ```bash
 docker-compose up --build
 ```
 
-3. Access external services:
+4. Or run all services locally in dev mode:
+
+```bash
+pnpm run dev
+```
+
+5. Access external services:
 
 - Gateway API: `http://localhost`
 - Grafana: `http://localhost:3000` (admin/admin)
 - Prometheus: `http://localhost:9090`
 - Jaeger: `http://localhost:16686`
+
+> Note: `pnpm run dev` starts each workspace service with `ts-node-dev` and uses `src/server.ts` as the entrypoint for all services.
 
 ## Service URLs
 
@@ -217,6 +246,55 @@ Response body:
 {
   "ownerName": "Alice Example",
   "requestId": "..."
+}
+```
+
+### Admin Service
+
+#### Health check
+
+GET `http://localhost/health`
+
+Response:
+
+```json
+Admin OK
+```
+
+#### Recent transactions
+
+GET `http://localhost/admin/transactions/recent`
+
+Response body:
+
+```json
+{
+  "transactions": []
+}
+```
+
+#### Ledger audit
+
+GET `http://localhost/admin/ledger/audit`
+
+Response body:
+
+```json
+{
+  "chainValid": true,
+  "issues": []
+}
+```
+
+#### Shutdown system
+
+POST `http://localhost/admin/system/shutdown`
+
+Response body:
+
+```json
+{
+  "message": "Shutdown initiated"
 }
 ```
 
